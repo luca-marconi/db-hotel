@@ -1,0 +1,43 @@
+SELECT * 
+FROM ospiti 
+WHERE document_type = 'CI'
+
+--------------------------------
+
+SELECT * 
+FROM `ospiti` 
+WHERE date_of_birth > '1988-12-31'
+
+--------------------------------
+
+SELECT * 
+FROM `ospiti` 
+WHERE date_of_birth < '2000-05-12'
+
+--------------------------------
+
+SELECT * 
+FROM `ospiti` 
+WHERE name LIKE 'd%'
+
+--------------------------------
+
+SELECT * 
+FROM `pagamenti` 
+WHERE status = 'accepted'
+
+--------------------------------
+
+SELECT MAX(price) 
+FROM `pagamenti`
+
+--------------------------------
+
+SELECT * 
+FROM `ospiti` 
+WHERE document_type = 'Driver License' AND date_of_birth BETWEEN '1975-01-01' AND '1975-12-31'
+
+--------------------------------
+
+SELECT SUM(beds) 
+FROM `stanze`
