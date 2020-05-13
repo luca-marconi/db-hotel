@@ -61,3 +61,13 @@ INNER JOIN `prenotazioni`
 ON `prenotazioni`.`id` = `prenotazioni_has_ospiti`.`prenotazione_id`
 WHERE `prenotazioni`.`created_at` LIKE '2018-05%'
 
+--------------------------------
+//Fai la somma di tutti i prezzi delle prenotazioni per le stanze del primo piano//
+SELECT SUM(price) AS 'Somma prezzi stanze primo piano'
+FROM pagamenti
+INNER JOIN prenotazioni
+ON prenotazioni.id = pagamenti.prenotazione_id
+INNER JOIN stanze
+ON stanze.id = prenotazioni.stanza_id
+WHERE stanze.floor = 1
+
