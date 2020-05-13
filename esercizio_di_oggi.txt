@@ -1,29 +1,63 @@
+//Conta gli ospiti raggruppandoli per anno di nascita//
+
 SELECT COUNT(`id`) AS 'anno di nascita', 
 YEAR(`date_of_birth`) FROM `ospiti`
 GROUP BY YEAR(`date_of_birth`);
 
 --------------------------------
+//Somma i prezzi dei pagamenti raggruppandoli per status//
 
 SELECT SUM(`price`) AS 'sum', `status` 
 FROM `pagamenti`
 GROUP BY (`status`)
 
 --------------------------------
+//Conta quante volte è stata prenotata ogni stanza//
 
 SELECT COUNT(id), stanza_id
 FROM prenotazioni
 GROUP BY (`stanza_id`)
 
 --------------------------------
+//Fai una analisi per vedere se ci sono ore in cui le prenotazioni sono più frequenti//
 
 SELECT TIME_FORMAT(created_at, "%H") AS Orario, COUNT(id) AS Prenotazioni
 FROM prenotazioni
 GROUP BY TIME_FORMAT(created_at, "%H")
 
 --------------------------------
+//Quante prenotazioni ha fatto l’ospite che ha fatto più prenotazioni?//
 
 SELECT COUNT(prenotazione_id), ospite_id
 FROM prenotazioni_has_ospiti
 GROUP BY ospite_id
 ORDER BY COUNT(prenotazione_id) DESC
 LIMIT 1
+
+
+
+--------------------------------
+//Come si chiamano gli ospiti che hanno fatto più di due prenotazioni?//
+
+SELECT ospiti.name, ospiti.lastname
+FROM prenotazioni_has_ospiti
+INNER JOIN ospiti
+ON prenotazioni_has_ospiti.ospite_id = ospiti.id
+GROUP BY prenotazioni_has_ospiti.ospite_id
+HAVING COUNT(prenotazioni_has_ospiti.ospite_id) > 2
+
+--------------------------------
+//Stampare Nome, Cognome, Prezzo e Pagante per tutte le prenotazioni fatte a Maggio 2018//
+
+SELECT prenotazioni_has_ospiti.prenotazione_id, ospiti.name, ospiti.lastname, pagamenti.price, paganti.name
+FROM prenotazioni_has_ospiti
+INNER JOIN ospiti
+ON ospiti.id = prenotazioni_has_ospiti.ospite_id
+INNER JOIN pagamenti
+ON pagamenti.prenotazione_id = prenotazioni_has_ospiti.prenotazione_id
+INNER JOIN paganti
+ON paganti.id = pagamenti.pagante_id
+INNER JOIN `prenotazioni`
+ON `prenotazioni`.`id` = `prenotazioni_has_ospiti`.`prenotazione_id`
+WHERE `prenotazioni`.`created_at` LIKE '2018-05%'
+
